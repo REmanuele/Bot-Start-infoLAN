@@ -1,0 +1,30 @@
+sudo tee /etc/systemd/system/telegram-ssh-watcher.service >/dev/null <<'EOF'
+[Unit]
+Description=Telegram SSH login watcher (journalctl)
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=root
+EnvironmentFile=/etc/telegram-boot-bot/config.conf
+ExecStart=/bin/bash -lc '(journalctl -fu ssh.service -o cat -S now -g "Accepted " 2>/dev/null || journalctl -fu sshd.service -o cat -S now -g "Accepted ") | while read -r L; do \
+  U=$(awk '\''match($0,/Accepted [^ ]+ for ([^ ]+) from ([^ ]+)/,a){print a[1]}'\'' <<<"$L"); \
+  IP=$(awk '\''match($0,/Accepted [^ ]+ for ([^ ]+) from ([^ ]+)/,a){print a[2]}'\'' <<<"$L"); \
+  [[ -z "$IP" ]] && continue; \
+  (ping -c1 -W1 "$IP" >/dev/null 2>&1 || true); \
+  MAC=$(ip neigh show "$IP" 2>/dev/null | awk '\''{print $5;exit}'\''); \
+  [[ -z "$MAC" ]] && MAC=$(arp -n "$IP" 2>/dev/null | awk '\''NR>1{print $3;exit}'\''); \
+  [[ -z "$MAC" ]] && MAC="n/d"; \
+  HOST=$(hostname); WHEN=$(date "+%Y-%m-%d %H:%M:%S"); \
+  MSG="🔒 Nuovo accesso SSH\n• Utente: ${U:-n/d}\n• IP remoto: $IP\n• MAC remoto: $MAC\n• Host: $HOST\n• Quando: $WHEN"; \
+  curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" -d chat_id="${CHAT_ID}" --data-urlencode "text=${MSG}" >/dev/null; \
+done'
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+sudo systemctl daemon-reload
+sudo systemctl enable --now telegram-ssh-watcher.service
