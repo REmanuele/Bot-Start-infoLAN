@@ -1,0 +1,9 @@
+# test messaggio di boot
+sudo systemctl start telegram-boot-bot.service
+
+# controlla che il watcher SSH sia attivo
+systemctl status telegram-ssh-watcher.service --no-pager
+
+# poi, da un altro PC/telefono:
+ssh pi@IP_DEL_RASPBERRY
+# dovresti ricevere la notifica Telegram
