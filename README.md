@@ -3,7 +3,7 @@
 
 Questo progetto invia automaticamente messaggi su Telegram quando:
 
-1. **Il Raspberry Pi si avvia** → messaggio “ricco” con informazioni di rete (Ethernet o Wi-Fi, IP, gateway, MAC, uptime).
+1. **Il Raspberry Pi si avvia** → messaggio con informazioni di rete (Ethernet o Wi-Fi, IP, gateway, MAC, uptime).
 2. **Qualcuno si collega in SSH al Raspberry** → messaggio con utente, IP remoto e, se in LAN, MAC.
 
 Tutto è gestito con **systemd**, quindi parte da solo ad ogni boot.
