@@ -1,0 +1,19 @@
+sudo tee /etc/systemd/system/telegram-boot-bot.service >/dev/null <<'EOF'
+[Unit]
+Description=Telegram notify on Raspberry boot (rich)
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/opt/telegram-boot-bot/notify_boot.sh
+User=root
+Group=root
+TimeoutStartSec=120
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+sudo systemctl daemon-reload
+sudo systemctl enable --now telegram-boot-bot.service
