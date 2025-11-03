@@ -1,0 +1,3 @@
+sudo systemctl disable --now telegram-boot.service
+sudo rm -f /etc/systemd/system/telegram-boot.service
+sudo systemctl daemon-reload
