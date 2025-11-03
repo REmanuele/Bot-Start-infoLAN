@@ -1,0 +1,5 @@
+sudo systemctl disable --now telegram-boot-bot.service telegram-ssh-watcher.service
+sudo rm -f /etc/systemd/system/telegram-boot-bot.service /etc/systemd/system/telegram-ssh-watcher.service
+sudo rm -rf /opt/telegram-boot-bot
+sudo rm -rf /etc/telegram-boot-bot
+sudo systemctl daemon-reload
