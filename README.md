@@ -20,7 +20,7 @@ Everything is managed via **systemd**, ensuring it runs automatically at every b
 
 ## 📁 Project Structure
 
-
+```text
 .
 ├── /etc/telegram-boot-bot/
 │   └── config.conf              # Stores your Telegram Token and Chat ID
