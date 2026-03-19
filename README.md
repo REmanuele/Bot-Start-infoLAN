@@ -30,6 +30,7 @@ Everything is managed via **systemd**, ensuring it runs automatically at every b
     ├── telegram-boot-bot.service      # Service triggered at boot
     └── telegram-ssh-watcher.service   # Service listening for incoming SSH logins
 
+```
 ---
 
 ## ⚙️ Installation & Setup
